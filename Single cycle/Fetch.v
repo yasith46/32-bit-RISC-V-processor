@@ -1,0 +1,45 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    20:56:59 10/16/2024 
+// Design Name: 
+// Module Name:    Fetch 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module Fetch(
+    output [31:0] instruction,       // The fetched instruction
+    input clk                        // Clock signal
+    );
+
+    wire [31:0] instruct_address;    // Address of the next instruction
+    wire [31:0] inst;                // The instruction from instruction memory
+
+    // Instantiate the ProgramCounter module
+    ProgramCounter pc(
+        .instruct_address(instruct_address),
+        .clk(clk)
+    );
+
+    // Instantiate the InstructMem module (assume InstructMem takes address and returns instruction)
+    InstructMem imem(
+        .Pro_count(instruct_address[8:2]),  // Pass the instruction address from ProgramCounter // For now just 7 bit address, can extend to 30
+        .inst_out(inst)           // Fetch the instruction corresponding to the address
+    );
+
+    // Output the fetched instruction
+    assign instruction = inst;
+
+endmodule
+
