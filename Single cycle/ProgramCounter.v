@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -19,18 +18,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
+
 // Jumping case also has to be implemented here
 module ProgramCounter(
     output reg [31:0] instruct_address, // Declare as reg since it's updated in an always block
-    input clk
+    input clk,
+	 input [31:0] instruct_address_in
     );
 
-    initial begin
-        instruct_address = 32'b0; // Initialize to zero for now. The compiler will point it to the right place initially
-    end
-
     always @(posedge clk) begin
-        instruct_address <= instruct_address + 32'd4; // Increment by 4 (word-aligned)
+        instruct_address <= instruct_address_in;
     end
 
 endmodule

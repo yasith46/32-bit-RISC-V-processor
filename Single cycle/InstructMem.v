@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -18,6 +17,8 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
+
+
 module InstructMem(
 		input wire [31:0] Pro_count,    // Program Counter bus width is 32 bits
 		output wire [31:0] inst_out   // Instruction bus width is 32 bits

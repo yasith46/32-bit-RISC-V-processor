@@ -123,6 +123,9 @@ module alu_ctrl(
 				2'b11:
 					ALUCTRL <= SLTU;
 					
+				default:
+					ALUCTRL <= 4'bx;
+					
 			endcase
 		end else begin
 			ALUCTRL <= 4'bx;
