@@ -26,10 +26,12 @@ module Fetch_tb;
 
     reg clk;
     wire [31:0] instruction;
+	 wire [31:0]	pro_count;
 
     // Instantiate the Fetch module
     Fetch fetch(
         .instruction(instruction),
+		  .current_procount(pro_count),
         .clk(clk)
     );
 
@@ -42,7 +44,7 @@ module Fetch_tb;
     // Simulation
     initial begin
         // Monitor the output
-        $monitor("Time = %0t, Instruction = %h", $time, instruction);
+        $monitor("Time = %0t, Instruction = %h, Program Coounter = %h", $time, instruction, pro_count);
 
         // Run the simulation for 100 time units
         #100;

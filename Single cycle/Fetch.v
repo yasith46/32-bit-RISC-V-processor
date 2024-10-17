@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 module Fetch(
     output [31:0] instruction,       // The fetched instruction
+	 output [31:0] current_procount,	 // The current program counter
     input clk                        // Clock signal
     );
 
@@ -34,12 +35,13 @@ module Fetch(
 
     // Instantiate the InstructMem module (assume InstructMem takes address and returns instruction)
     InstructMem imem(
-        .Pro_count(instruct_address[8:2]),  // Pass the instruction address from ProgramCounter // For now just 7 bit address, can extend to 30
+        .Pro_count(instruct_address[31:0]),  // Pass the instruction address from ProgramCounter
         .inst_out(inst)           // Fetch the instruction corresponding to the address
     );
 
-    // Output the fetched instruction
+    // Output the fetched instruction and the current program counter
     assign instruction = inst;
+	 assign current_procount = instruct_address[31:0];
 
 endmodule
 
