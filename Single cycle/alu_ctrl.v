@@ -15,30 +15,30 @@
 //  |  OR     |   R    |   10    |  110 |   0 |  OR    |
 //  |  AND    |   R    |   10    |  111 |   0 |  AND   |
 //  +---------+--------+---------+------+-----+--------+
-//  |  ADDI   |   I    |   00    |  000 |   X |  ADD   |
-//  |  SLTI   |   I    |   00    |  010 |   X |  SLT   |
-//  |  SLTIU  |   I    |   00    |  011 |   X |  SLTU  |
-//  |  XORI   |   I    |   00    |  100 |   X |  XOR   |
-//  |  ORI    |   I    |   00    |  110 |   X |  OR    |
-//  |  ANDI   |   I    |   00    |  111 |   X |  AND   |
-//  |  SLLI   |   I    |   00    |  001 |   X |  SLL   |
-//  |  SRLI   |   I    |   00    |  101 |   X |  SRL   |
-//  |  SRAI   |   I    |   00    |  101 |   X |  SRA   |
-//  |  JALR   |   I    |   00    |  000 |   X |  ADD   |
+//  |  ADDI   |   I    |   10    |  000 |   X |  ADD   |
+//  |  SLTI   |   I    |   10    |  010 |   X |  SLT   |
+//  |  SLTIU  |   I    |   10    |  011 |   X |  SLTU  |
+//  |  XORI   |   I    |   10    |  100 |   X |  XOR   |
+//  |  ORI    |   I    |   10    |  110 |   X |  OR    |
+//  |  ANDI   |   I    |   10    |  111 |   X |  AND   |
+//  |  SLLI   |   I    |   10    |  001 |   X |  SLL   |
+//  |  SRLI   |   I    |   10    |  101 |   X |  SRL   |
+//  |  SRAI   |   I    |   10    |  101 |   X |  SRA   |
+//  |  JALR   |   I    |   10    |  000 |   X |  ADD   |
 //  +---------+--------+---------+------+-----+--------+
 //  |  LUI    |   U    |   XX    |  XXX |   X |  -     |
 //  |  AUIPC  |   U    |   XX    |  XXX |   X |  -     |
 //  |  JAL    |   UJ   |   XX    |  XXX |   X |  -     |
 //  +---------+--------+---------+------+-----+--------+
-//  |  SB     |   S    |   00 (?)|  000 |   X |  ADD   |
-//  |  SH     |   S    |   00 (?)|  001 |   X |  ADD   |
-//  |  SW     |   S    |   00 (?)|  010 |   X |  ADD   |
+//  |  SB     |   S    |   00    |  000 |   X |  ADD   |
+//  |  SH     |   S    |   00    |  001 |   X |  ADD   |
+//  |  SW     |   S    |   00    |  010 |   X |  ADD   |
 //  +---------+--------+---------+------+-----+--------+
-//  |  LB     |   I    |   00 (?)|  000 |   X |  ADD   |
-//  |  LH     |   I    |   00 (?)|  001 |   X |  ADD   |
-//  |  LW     |   I    |   00 (?)|  010 |   X |  ADD   |
-//  |  LBU    |   I    |   00 (?)|  100 |   X |  ADD(?)|
-//  |  LHU    |   I    |   00 (?)|  101 |   X |  ADD(?)|
+//  |  LB     |   I    |   00    |  000 |   X |  ADD   |
+//  |  LH     |   I    |   00    |  001 |   X |  ADD   |
+//  |  LW     |   I    |   00    |  010 |   X |  ADD   |
+//  |  LBU    |   I    |   00    |  100 |   X |  ADD   |
+//  |  LHU    |   I    |   00    |  101 |   X |  ADD   |
 //  +---------+--------+---------+------+-----+--------+
 //  |  BEQ    |   SB   |   01    |  000 |   X |  SUB   |
 //  |  BNE    |   SB   |   01    |  001 |   X |  SUB   |
@@ -69,7 +69,7 @@ module alu_ctrl(
 				 
 	
 	always@(*) begin
-		if ((ALUOp == 2'b10)|(ALUOp == 2'b00)) begin	// ----------------- R type / I type
+		if (ALUOp == 2'b10) begin	// ----------------- R type / I type
 			case (FUNC3)
 				3'b000:
 					begin
@@ -109,7 +109,7 @@ module alu_ctrl(
 					ALUCTRL <= 4'bx;
 					
 			endcase		
-		end else if (ALUOp == 2'b11) begin
+		end else if (ALUOp == 2'b00) begin
 			ALUCTRL <= ADD;
 			
 		end else if (ALUOp == 2'b01) begin
