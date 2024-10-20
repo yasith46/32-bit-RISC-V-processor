@@ -30,11 +30,11 @@ module InstructMem(
 		assign inst_out = IM[Pro_count[31:2]];		// Load instruction at the given address to the output
 		
 		initial begin
-        // Preload some instructions into instruction memory
-        IM[1] = 32'h00430820; // ADD R1, R2, R3
-        IM[2] = 32'h00851022; // SUB R4, R5, R6
-        IM[3] = 32'h3C071064; // LOAD R7, 100
-        // ... More instructions can be loaded here
+			  // Preload some instructions into instruction memory
+			  IM[1] = 32'h00430820; // ADD R1, R2, R3
+			  IM[2] = 32'h00851022; // SUB R4, R5, R6
+			  IM[3] = 32'h3C071064; // LOAD R7, 100
+			  // ... More instructions can be loaded here
     end
 
 endmodule

@@ -19,7 +19,8 @@ module alu(
 				 SLTU = 4'b1001;
 				 
 	parameter BEQ = 3'b000, BNE = 3'b001, BLT = 3'b100,
-				 BGE = 3'b101, BLTU= 3'b110, BGEU= 3'b111; 
+				 BGE = 3'b101, BLTU= 3'b110, BGEU= 3'b111,
+				 JMP = 3'b010; 
 		
 		
 	always@(*) begin
@@ -133,8 +134,11 @@ module alu(
 			BGEU:
 				BRANCHFLAG <= ~OUT[0];
 				
+			JMP:
+				BRANCHFLAG <= 1'b1;
+				
 			default:
-				BRANCHFLAG <= 1'bx;		
+				BRANCHFLAG <= 1'b0;		
 		endcase
 	end
 				

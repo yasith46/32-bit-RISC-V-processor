@@ -27,8 +27,8 @@ module processor_main(
 	
 	// ---- Control signals ----
 	
-	wire CTRL_BRANCH, CTRL_MEMREAD, CTRL_MEMTOREG, CTRL_MEMWRITE, CTRL_ALUSRC, CTRL_REGWRITE;
-	wire [1:0] CTRL_ALUOP;
+	wire CTRL_MEMREAD, CTRL_MEMWRITE, CTRL_ALUSRC, CTRL_REGWRITE, CRTL_PCADD4_WRITE, CTRL_PCADDI_WRITE;
+	wire [1:0] CTRL_ALUOP, CTRL_BRANCH, CTRL_REGWRITESEL;
 	
 	///////////////////////////
 	// Contol unit goes here //
@@ -113,7 +113,9 @@ module processor_main(
 		.data_out(DMEM_OUT)	
 	);
 	
-	assign RD_DATA = (CTRL_MEMTOREG == 1'b1) ? DMEM_OUT : ALU_OUT;
+	assign RD_DATA = (CTRL_REGWRITESEL == 2'b00) ? ALU_OUT:
+						  (CTRL_REGWRITESEL == 2'b01) ? DMEM_OUT:
+						  (CTRL_REGWRITESEL == 2'b10) ? PC_ORDINARY : PC_BRANCH;
 	
 	
 	
@@ -129,6 +131,8 @@ module processor_main(
 	
 	cla32 add_1(.A(INS_ADDR),  .B(IMM_EXT_SHIFTED),  .CIN(1'b0),  .OF(),  .SUM(PC_BRANCH),  .BAND(),  .BXOR());
 	
-	assign INS_ADDR_IN = ((CTRL_BRANCH & ALU_BRANCHFLAG) == 1'b0) ? PC_ORDINARY : PC_BRANCH;
+	assign INS_ADDR_IN = ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b01) ? PC_ORDINARY : 
+								({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b11) ? PC_BRANCH :
+								({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b10) ? ALU_OUT : 32'bx;
 	
 endmodule 

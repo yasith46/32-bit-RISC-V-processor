@@ -24,11 +24,11 @@
 //  |  SLLI   |   I    |   10    |  001 |   X |  SLL   |
 //  |  SRLI   |   I    |   10    |  101 |   X |  SRL   |
 //  |  SRAI   |   I    |   10    |  101 |   X |  SRA   |
-//  |  JALR   |   I    |   10    |  000 |   X |  ADD   |
+//  |  JALR   |   I    |   11    |  000 |   X |  ADD   |
 //  +---------+--------+---------+------+-----+--------+
 //  |  LUI    |   U    |   XX    |  XXX |   X |  -     |
-//  |  AUIPC  |   U    |   XX    |  XXX |   X |  -     |
-//  |  JAL    |   UJ   |   XX    |  XXX |   X |  -     |
+//  |  AUIPC  |   U    |   11    |  XXX |   X |  -     |
+//  |  JAL    |   UJ   |   11    |  XXX |   X |  -     |
 //  +---------+--------+---------+------+-----+--------+
 //  |  SB     |   S    |   00    |  000 |   X |  ADD   |
 //  |  SH     |   S    |   00    |  001 |   X |  ADD   |
@@ -134,6 +134,8 @@ module alu_ctrl(
 		
 		if (ALUOp == 2'b01) begin
 			BRANCHCONDITION <= FUNC3;
+		end else if (ALUOp == 2'b11) begin
+			BRANCHCONDITION <= 3'b010;
 		end else begin
 			BRANCHCONDITION <= 3'bx;
 		end
