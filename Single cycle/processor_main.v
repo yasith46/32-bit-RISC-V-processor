@@ -113,8 +113,8 @@ module processor_main(
 		.data_out(DMEM_OUT)	
 	);
 	
-	assign RD_DATA = (CTRL_REGWRITESEL == 2'b01) ? ALU_OUT:
-		(CTRL_REGWRITESEL == 2'b00) ? DMEM_OUT:
+	assign RD_DATA = (CTRL_REGWRITESEL == 2'b00) ? ALU_OUT:
+		(CTRL_REGWRITESEL == 2'b01) ? DMEM_OUT:
 						  (CTRL_REGWRITESEL == 2'b10) ? PC_ORDINARY : PC_BRANCH;
 	
 	
