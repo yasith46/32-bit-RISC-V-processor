@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Yasith Silva
+// Group: 		MetroniX 
+// Designer: 		Yasith Silva
 // 
 // Create Date:    	18:59:23 10/10/2024 
-// Design Name: 	 	Carry Look Ahead Adder
+// Design Name:  	Carry Look Ahead Adder
 // Module Name:    	cla 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			1
+// Revision: 		1
 // Additional Comments:  
 //
 //////////////////////////////////////////////////////////////////////////////////
