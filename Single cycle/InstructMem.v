@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Bimsara Nawarathne
+// Group: 		MetroniX 
+// Designer:		Bimsara Nawarathne
 // 
 // Create Date:    	10:48:01 10/10/2024 
-// Design Name: 	 	Instruction memory
+// Design Name:  	Instruction memory
 // Module Name:    	InstructMem 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
@@ -12,7 +12,7 @@
 //
 // Revision: 			1
 // Additional Comments: - Change initial block with the intended instruction memory,
-//								  or make it read from a hex file  
+//			  or make it read from a hex file  
 //
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -21,7 +21,7 @@
 module InstructMem(
 		input wire [31:0] Pro_count,    // Program Counter bus width is 32 bits
 		output wire [31:0] inst_out   // Instruction bus width is 32 bits
-   );
+	);
 
 	reg [31:0] IM [127:0];    // Data memory with 128 locations // Can extend 128 to 2^30
 		
