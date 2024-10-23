@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Yasith Silva
+// Group: 		MetroniX 
+// Designer: 		Yasith Silva
 // 
 // Create Date:    	22:57:37 16/10/2024 
-// Design Name: 	 	Sign Extender / Immediate Generator
+// Design Name:  	Sign Extender / Immediate Generator
 // Module Name:    	immediate_gen 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			1
+// Revision: 		1
 // Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
