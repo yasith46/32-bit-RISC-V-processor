@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Yasith Silva
+// Group: 		MetroniX 
+// Designer: 		Yasith Silva
 // 
 // Create Date:    	18:43:07  22/10/2024 
-// Design Name: 	 	CLA without AND XOR outputs
+// Design Name:  	CLA without AND XOR outputs
 // Module Name:    	cla_add 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			1
+// Revision: 		1
 // Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
