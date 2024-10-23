@@ -1,3 +1,19 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Group: 				MetroniX 
+// Designer: 			Yasith Silva
+// 
+// Create Date:    	05:33:22 13/10/2024 
+// Design Name: 	 	ALU Controller
+// Module Name:    	alu_ctrl 
+// Project Name:   	32 bit Single Cycle RISC-V processor
+// Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
+//
+// Dependencies: 
+//
+// Revision: 			1
+// Additional Comments:
+//
+//////////////////////////////////////////////////////////////////////////////////
 // 
 //  +--------------------------------------------------+
 //  |  Instruction set                                 | 
@@ -24,6 +40,7 @@
 //  |  SLLI   |   I    |   10    |  001 |   X |  SLL   |
 //  |  SRLI   |   I    |   10    |  101 |   X |  SRL   |
 //  |  SRAI   |   I    |   10    |  101 |   X |  SRA   |
+//  +---------+--------+---------+------+-----+--------+
 //  |  JALR   |   I    |   11    |  000 |   X |  ADD   |
 //  +---------+--------+---------+------+-----+--------+
 //  |  LUI    |   U    |   XX    |  XXX |   X |  -     |

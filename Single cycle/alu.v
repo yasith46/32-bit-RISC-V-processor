@@ -1,3 +1,22 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Group: 				MetroniX 
+// Designer: 			Yasith Silva
+// 
+// Create Date:    	18:59:49 10/10/2024 
+// Design Name: 	 	Main Arithmetic Logic Unit
+// Module Name:    	alu 
+// Project Name:   	32 bit Single Cycle RISC-V processor
+// Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
+//
+// Dependencies: 
+//
+// Revision: 			1
+// Additional Comments:  
+//
+//////////////////////////////////////////////////////////////////////////////////
+
+
+
 module alu(
 		input  [31:0] A, B,
 		input  [3:0]  CTRL,

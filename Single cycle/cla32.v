@@ -1,3 +1,20 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Group: 				MetroniX 
+// Designer: 			Yasith Silva
+// 
+// Create Date:    	22:09:08  17/10/2024 
+// Design Name: 	 	32 CLA network 
+// Module Name:    	cla32 
+// Project Name:   	32 bit Single Cycle RISC-V processor
+// Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
+//
+// Dependencies: 
+//
+// Revision: 			1
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+
 module cla32(
 		input [31:0] A, B,
 		input CIN,
@@ -31,5 +48,7 @@ module cla32(
 				
 	cla cla7(.A(A[31:28]), .B(B[31:28]), .CIN(COUT[6]), .COUT(COUT[7]), 
 				.SUM(SUM[31:28]), .BAND(BAND[31:28]), .BXOR(BXOR[31:28]));
+				
+	assign OF = COUT[7];
 	
 endmodule 

@@ -1,23 +1,20 @@
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Group: 				MetroniX 
+// Designer: 			Isuranga Senavirathne
 // 
-// Create Date: 10.10.2024 18:57:22
-// Design Name: 
-// Module Name: Register_File
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
+// Create Date:    	10.10.2024 18:57:22 
+// Design Name: 	 	Registry File
+// Module Name:    	Register_File 
+// Project Name:   	32 bit Single Cycle RISC-V processor
+// Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
+//
 // Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+//
+// Revision: 			1
+// Additional Comments:  
+//
 //////////////////////////////////////////////////////////////////////////////////
+
 
 
 module Register_File(
@@ -40,6 +37,14 @@ module Register_File(
     // Declare 32 registers, each 8 bits wide
     reg [31:0] registers [31:0]; 
     //integer i;
+	 
+	 //To test initially *** removre later
+	 initial begin
+        // Preload some data to check read
+        registers[1] = 32'h00000001; 
+        registers[2] = 32'h00000002; 
+    end
+	 
      // Read logic
     always @(*) begin
         Read_data01 = registers[Read_reg01];
