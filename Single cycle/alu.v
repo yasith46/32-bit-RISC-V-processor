@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Yasith Silva
+// Group: 		MetroniX 
+// Designer: 		Yasith Silva
 // 
 // Create Date:    	18:59:49 10/10/2024 
-// Design Name: 	 	Main Arithmetic Logic Unit
+// Design Name: 	Main Arithmetic Logic Unit
 // Module Name:    	alu 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			1
+// Revision: 		1
 // Additional Comments:  
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -33,13 +33,13 @@ module alu(
 	cla32 cla32_0(.A(A_ALU),  .B(B_ALU^{4{CIN}}),  .CIN(CIN),  .OF(),  .SUM(SUM),  .BAND(BAND),  .BXOR(BXOR));
 				
 	parameter ADD = 4'b0000,  SUB = 4'b0001,  SLL = 4'b0010, 
-				 SRL = 4'b0011,  SRA = 4'b0100,  AND = 4'b0101,
-				 OR  = 4'b0110,  XOR = 4'b0111,  SLT = 4'b1000, 
-				 SLTU = 4'b1001;
+		  SRL = 4'b0011,  SRA = 4'b0100,  AND = 4'b0101,
+		  OR  = 4'b0110,  XOR = 4'b0111,  SLT = 4'b1000, 
+		  SLTU = 4'b1001;
 				 
 	parameter BEQ = 3'b000, BNE = 3'b001, BLT = 3'b100,
-				 BGE = 3'b101, BLTU= 3'b110, BGEU= 3'b111,
-				 JMP = 3'b010; 
+		  BGE = 3'b101, BLTU= 3'b110, BGEU= 3'b111,
+		  JMP = 3'b010; 
 		
 		
 	always@(*) begin
