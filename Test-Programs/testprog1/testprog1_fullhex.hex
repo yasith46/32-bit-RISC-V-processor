@@ -1,0 +1,9 @@
+file.elf:     file format elf64-littleriscv
+
+Contents of section .text:
+ 0000 13030008 83230300 83230300 9300803e  .....#...#.....>
+ 0010 1381007d 930281c1 b3015140 63940100  ...}......Q@c...
+ 0020 6f00c000 9382f2ff 6ff01fff 37523412  o.......o...7R4.
+ 0030 1b028267 23204300 13000000           ...g# C.....    
+Contents of section .data:
+ 0080 efbeadde                             ....            
