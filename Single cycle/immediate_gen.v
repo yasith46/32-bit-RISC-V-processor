@@ -1,16 +1,18 @@
+`timescale 1ns / 1ps
+
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 		MetroniX 
-// Designer: 		Yasith Silva
+// Group: 				MetroniX 
+// Designer: 			Yasith Silva
 // 
 // Create Date:    	22:57:37 16/10/2024 
-// Design Name:  	Sign Extender / Immediate Generator
+// Design Name: 	 	Sign Extender / Immediate Generator
 // Module Name:    	immediate_gen 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 		1
+// Revision: 			1
 // Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -59,26 +61,26 @@ module immediate_gen(
 	);
 	
 	always@(*) begin
+		#2;
 		case(INSTRUCTION[6:0])				
 			7'b0110111:							// LUI
 				begin
-					IMMEDIATE_OUT[31:12] <= INSTRUCTION[31:21];
+					IMMEDIATE_OUT[31:12] <= INSTRUCTION[31:12];
 					IMMEDIATE_OUT[11:0]  <= 12'b0;
 				end
 			
 			7'b0010111:							// AUIPC
 				begin
-					IMMEDIATE_OUT[31:12] <= INSTRUCTION[31:21];
+					IMMEDIATE_OUT[31:12] <= INSTRUCTION[31:12];
 					IMMEDIATE_OUT[11:0]  <= 12'b0;
 				end
 				
 			7'b1101111:							// JAL
 				begin
-					IMMEDIATE_OUT[31:20] <= {12{INSTRUCTION[31]}};
-					IMMEDIATE_OUT[19:12] <= INSTRUCTION[19:12];
-					IMMEDIATE_OUT[11]    <= INSTRUCTION[20];
-					IMMEDIATE_OUT[10:1]  <= INSTRUCTION[30:21];
-					IMMEDIATE_OUT[0]     <= 1'b0;
+					IMMEDIATE_OUT[31:19] <= {13{INSTRUCTION[31]}};
+					IMMEDIATE_OUT[18:11] <= INSTRUCTION[19:12];
+					IMMEDIATE_OUT[10]    <= INSTRUCTION[20];
+					IMMEDIATE_OUT[9:0]  <= INSTRUCTION[30:21];
 				end
 				
 			7'b1100111:							// JALR
@@ -96,7 +98,7 @@ module immediate_gen(
 						
 					end else begin
 						// Other I type
-						IMMEDIATE_OUT[31:12] <= {12{INSTRUCTION[31]}};
+						IMMEDIATE_OUT[31:12] <= {20{INSTRUCTION[31]}};
 						IMMEDIATE_OUT[11:0]  <= INSTRUCTION[31:20];
 					end						
 				end
@@ -116,12 +118,11 @@ module immediate_gen(
 				
 			7'b1100011:		// Branch
 				begin
-					IMMEDIATE_OUT[31:13] <= {19{INSTRUCTION[31]}};
-					IMMEDIATE_OUT[12]    <= INSTRUCTION[31];
-					IMMEDIATE_OUT[11]    <= INSTRUCTION[7];
-					IMMEDIATE_OUT[10:5]  <= INSTRUCTION[30:25];
-					IMMEDIATE_OUT[4:1]   <= INSTRUCTION[11:8];
-					IMMEDIATE_OUT[0]     <= 1'b0;
+					IMMEDIATE_OUT[31:12] <= {20{INSTRUCTION[31]}};
+					IMMEDIATE_OUT[11]    <= INSTRUCTION[31];
+					IMMEDIATE_OUT[10]    <= INSTRUCTION[7];
+					IMMEDIATE_OUT[9:4]  <= INSTRUCTION[30:25];
+					IMMEDIATE_OUT[3:0]   <= INSTRUCTION[11:8];
 				end
 				
 			default:
