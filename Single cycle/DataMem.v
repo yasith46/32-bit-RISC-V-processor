@@ -29,19 +29,19 @@ module DataMem(
 		output reg [31:0] data_out
 	);
 
-   (* ramstyle = "M9K" *) reg [31:0] DM [255:0];       // Data memory with 128 locations, can extend upto 2^30 locations
+	(* ramstyle = "M9K" *) reg [31:0] DM [255:0];       // Data memory with 128 locations, can extend upto 2^30 locations
 
-   // Combinational read
+   	// Combinational read
    
-   always @(posedge clk) begin
+   	always @(posedge clk) begin
 		if (write_en) begin
 			#6;
 			DM[address[31:2]] <= data_in;  // Write to memory on posedge of clk when write_en is high
-      end else begin
+      		end else begin
 			#6;
 			data_out <= DM[address[31:2]];	// First two bits of the address is reserved for byte addressing
 		end
-   end
+   	end
 	 
 	initial begin
 		DM[31] = 32'h0012ffea;
