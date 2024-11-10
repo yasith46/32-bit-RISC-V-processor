@@ -1,18 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Bimsara Nawarathne, Yasith Silva
+// Group: 		MetroniX 
+// Designer: 		Bimsara Nawarathne, Yasith Silva
 // 
 // Create Date:    	11:29:15 17/10/2024 
-// Design Name: 	 	Processor (Top module)
+// Design Name: 	Processor (Top module)
 // Module Name:    	processor_main 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			3
+// Revision: 		3
 // Additional Comments: - Add inspectbuffer the fucntionality to inspect a specific 
-//								  location 
+//			  location 
 //
 //////////////////////////////////////////////////////////////////////////////////
 
