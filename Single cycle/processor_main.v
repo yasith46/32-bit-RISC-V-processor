@@ -21,24 +21,24 @@
 module processor_main(
 		input  clk, reset_n,                       // Clock signal
 		output [6:0] seg0, seg1, seg2, seg3, seg4, seg5, seg6, seg7
-   );
+	);
 	 
-   wire [31:0] current_instruction, next_instruction, PCADD4;    // Address of the next instruction
-   wire [31:0] inst;                // The instruction from instruction memory
+   	wire [31:0] current_instruction, next_instruction, PCADD4;    // Address of the next instruction
+   	wire [31:0] inst;                // The instruction from instruction memory
 	wire [31:0] data_rs1;
 	wire [31:0] data_rs2;
 	wire [31:0] displaywire;
 	
 	add pcadd4(.A(current_instruction), .B(32'd4), .CIN(1'b0), .OF(), .SUM(PCADD4));
 
-   // Instantiate the InstructMem module (assume InstructMem takes address and returns instruction)
-   InstructMem imem(
+   	// Instantiate the InstructMem module (assume InstructMem takes address and returns instruction)
+   	InstructMem imem(
 		.instruct_address_in(next_instruction),
-      .clk(clk),
+      		.clk(clk),
 		.rst(reset_n),
 		.instruct_address(current_instruction),
 		.inst_out(inst)           // Fetch the instruction corresponding to the address
-   );
+   	);
 	 
 	wire CTRL_MEMREAD, CTRL_MEMWRITE, CTRL_ALUSRC, CTRL_REGWRITE, CRTL_IMMTOREG;
 	wire [1:0] CTRL_ALUOP, CTRL_BRANCH, CTRL_REGWRITESEL;
@@ -120,12 +120,12 @@ module processor_main(
 	add pcaddimm(.A(current_instruction), .B(IMM_EXT << 1), .CIN(1'b0), .OF(), .SUM(PCADDIMM));
 	
 	assign REGWRITE_DATA = (CTRL_REGWRITESEL == 2'b00) ? CAL_OUT :
-								  (CTRL_REGWRITESEL == 2'b01) ? DMEM_OUT : 
-								  (CTRL_REGWRITESEL == 2'b10) ? PCADD4 : PCADDIMM;
+	                       (CTRL_REGWRITESEL == 2'b01) ? DMEM_OUT : 
+	                       (CTRL_REGWRITESEL == 2'b10) ? PCADD4 : PCADDIMM;
 								  
 	assign next_instruction = ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b00) ? PCADD4 :
-									  ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b01) ? PCADD4 :
-									  ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b10) ? ALU_OUT : PCADDIMM;
+	                          ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b01) ? PCADD4 :
+	                          ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b10) ? ALU_OUT : PCADDIMM;
 	
 	display disp0(.DISPLAYWIRE(displaywire[3:0]),   .SEG(seg0));
 	display disp1(.DISPLAYWIRE(displaywire[7:4]),   .SEG(seg1));
