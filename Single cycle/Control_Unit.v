@@ -1,20 +1,20 @@
 `timescale 1ns / 1ps
 
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Isuranga Senavirathne, Yasith Silva
+// Group: 		MetroniX 
+// Designer: 		Isuranga Senavirathne, Yasith Silva
 // 
 // Create Date:    	19.10.2024 16:05:53 
-// Design Name: 	 	Control Unit
+// Design Name: 	Control Unit
 // Module Name:    	Control_Unit 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			3
+// Revision: 		3
 // Additional Comments: - Add new cases for additional / custom instructions,
-//								  currently any insturction out of base set considered as NOP
+//			  currently any insturction out of base set considered as NOP
 //
 //////////////////////////////////////////////////////////////////////////////////
 
