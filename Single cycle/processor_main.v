@@ -20,13 +20,14 @@
 
 module processor_main(
 		input  clk, reset_n,                       // Clock signal
-		output reg [31:0] inspectbuffer
+		output [6:0] seg0, seg1, seg2, seg3, seg4, seg5, seg6, seg7
    );
 	 
    wire [31:0] current_instruction, next_instruction, PCADD4;    // Address of the next instruction
    wire [31:0] inst;                // The instruction from instruction memory
 	wire [31:0] data_rs1;
 	wire [31:0] data_rs2;
+	wire [31:0] displaywire;
 	
 	add pcadd4(.A(current_instruction), .B(32'd4), .CIN(1'b0), .OF(), .SUM(PCADD4));
 
@@ -64,6 +65,7 @@ module processor_main(
 		.Write_data(REGWRITE_DATA),
 		.Read_data01(data_rs1),
 		.Read_data02(data_rs2),
+		.Display_buffer(displaywire),
 		.write_signal(CTRL_REGWRITE),
 		.clk(clk)
 	);
@@ -124,9 +126,14 @@ module processor_main(
 	assign next_instruction = ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b00) ? PCADD4 :
 									  ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b01) ? PCADD4 :
 									  ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b10) ? ALU_OUT : PCADDIMM;
-										  
-	always@(*) begin
-		inspectbuffer <= DMEM_OUT;
-	end
+	
+	display disp0(.DISPLAYWIRE(displaywire[3:0]),   .SEG(seg0));
+	display disp1(.DISPLAYWIRE(displaywire[7:4]),   .SEG(seg1));
+	display disp2(.DISPLAYWIRE(displaywire[11:8]),  .SEG(seg2));
+	display disp3(.DISPLAYWIRE(displaywire[15:12]), .SEG(seg3));
+	display disp4(.DISPLAYWIRE(displaywire[19:16]), .SEG(seg4));
+	display disp5(.DISPLAYWIRE(displaywire[23:20]), .SEG(seg5));
+	display disp6(.DISPLAYWIRE(displaywire[27:24]), .SEG(seg6));
+	display disp7(.DISPLAYWIRE(displaywire[31:28]), .SEG(seg7));
 
 endmodule 

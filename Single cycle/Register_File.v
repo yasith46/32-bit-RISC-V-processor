@@ -22,18 +22,20 @@
 
 module Register_File(
  // inputs   
-    input wire[4:0] Read_reg01, // RS1 instruction value for reading register 01
-    input wire [4:0] Read_reg02, // RS2 instruction value for reading register 02
-    input wire [4:0] Write_reg,   // RD instruction value for writing register
-    input wire [31:0] Write_data, // 32 bit data to be written to register
+    input [4:0] Read_reg01, // RS1 instruction value for reading register 01
+    input [4:0] Read_reg02, // RS2 instruction value for reading register 02
+    input [4:0] Write_reg,   // RD instruction value for writing register
+    input [31:0] Write_data, // 32 bit data to be written to register
 
 //outputs
     output reg [31:0] Read_data01,
     output reg [31:0] Read_data02,
+	 
+	 output reg [31:0] Display_buffer,
     
 // control signals
-    input wire write_signal ,
-    input wire clk
+    input write_signal ,
+    input clk
     //input wire rst
    );
    
@@ -42,9 +44,11 @@ module Register_File(
 	 
      // Read logic
     always @(*) begin
-		  registers[0] = 32'b0;
-        Read_data01 = registers[Read_reg01];
-        Read_data02 = registers[Read_reg02];
+		  //#2;
+		  registers[0]   = 32'b0;
+        Read_data01    = registers[Read_reg01];
+        Read_data02    = registers[Read_reg02];
+		  Display_buffer = registers[5'b11111];
     end
      // Write logic (triggered on clock edge)
     always @(posedge clk) begin
