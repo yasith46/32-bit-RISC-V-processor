@@ -1,18 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 				MetroniX 
-// Designer: 			Bimsara Nawarathne
+// Group: 		MetroniX 
+// Designer: 		Bimsara Nawarathne
 // 
 // Create Date:    	10:48:01 10/10/2024 
-// Design Name: 	 	Instruction memory
+// Design Name: 	Instruction memory
 // Module Name:    	InstructMem 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 			1
+// Revision: 		1
 // Additional Comments: - Change initial block with the intended instruction memory,
-//								  or make it read from a hex file  
+//			  or make it read from a hex file  
 //
 ////////////////////////////////////////////////////////////////////////////
 
