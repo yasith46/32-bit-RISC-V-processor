@@ -45,7 +45,7 @@ module alu(
 		
 		
 	always@(*) begin
-		#2;
+		//#2;
 		case (CTRL)
 			ADD: 
 				begin 

@@ -1,18 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Group: 		MetroniX 
-// Designer: 		Bimsara Nawarathne, Yasith Silva
+// Group: 				MetroniX 
+// Designer: 			Bimsara Nawarathne, Yasith Silva
 // 
 // Create Date:    	11:29:15 17/10/2024 
-// Design Name: 	Processor (Top module)
+// Design Name: 	 	Processor (Top module)
 // Module Name:    	processor_main 
 // Project Name:   	32 bit Single Cycle RISC-V processor
 // Target Devices: 	Altera Cyclone IV EP4CE115F29 (DE2-115)
 //
 // Dependencies: 
 //
-// Revision: 		3
+// Revision: 			3
 // Additional Comments: - Add inspectbuffer the fucntionality to inspect a specific 
-//			  location 
+//								  location 
 //
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -20,27 +20,37 @@
 
 module processor_main(
 		input  clk, reset_n,                       // Clock signal
-		output [6:0] seg0, seg1, seg2, seg3, seg4, seg5, seg6, seg7
-	);
+		input  [31:0] dmem_datain, 
+		output [31:0] dmem_addr, dmem_dataout,
+		output dmem_rw, io_rw
+   );
 	 
-   	wire [31:0] current_instruction, next_instruction, PCADD4;    // Address of the next instruction
-   	wire [31:0] inst;                // The instruction from instruction memory
+   wire [31:0] current_instruction, next_instruction, PCADD4;    // Address of the next instruction
+   wire [31:0] inst;                // The instruction from instruction memory
 	wire [31:0] data_rs1;
 	wire [31:0] data_rs2;
-	wire [31:0] displaywire;
+	
+	reg [31:0] PC;
+	
+	always@(posedge clk or negedge reset_n) begin
+		if (~reset_n) 
+			PC <= 32'b0;
+		else
+			PC <= next_instruction;
+	end
+	
+	assign current_instruction = PC;
 	
 	add pcadd4(.A(current_instruction), .B(32'd4), .CIN(1'b0), .OF(), .SUM(PCADD4));
-
-   	// Instantiate the InstructMem module (assume InstructMem takes address and returns instruction)
-   	InstructMem imem(
-		.instruct_address_in(next_instruction),
-      		.clk(clk),
-		.rst(reset_n),
-		.instruct_address(current_instruction),
+	
+	// Instantiate the InstructMem module (assume InstructMem takes address and returns instruction)
+   InstructMem imem(
+		.instruct_address_in(current_instruction),
 		.inst_out(inst)           // Fetch the instruction corresponding to the address
-   	);
+   );
 	 
-	wire CTRL_MEMREAD, CTRL_MEMWRITE, CTRL_ALUSRC, CTRL_REGWRITE, CRTL_IMMTOREG;
+	//wire CTRL_MEMREAD; 
+	wire CTRL_MEMWRITE, CTRL_ALUSRC, CTRL_REGWRITE, CRTL_IMMTOREG;
 	wire [1:0] CTRL_ALUOP, CTRL_BRANCH, CTRL_REGWRITESEL;
 	 
 	Control_Unit cu(
@@ -65,7 +75,6 @@ module processor_main(
 		.Write_data(REGWRITE_DATA),
 		.Read_data01(data_rs1),
 		.Read_data02(data_rs2),
-		.Display_buffer(displaywire),
 		.write_signal(CTRL_REGWRITE),
 		.clk(clk)
 	);
@@ -103,15 +112,12 @@ module processor_main(
 	
 	
 	wire [31:0] DMEM_OUT;
+	assign dmem_addr    = ALU_OUT;
+	assign dmem_dataout = data_rs2;
+	assign DMEM_OUT     = dmem_datain;
+	assign dmem_rw      = CTRL_MEMWRITE & (~&{ALU_OUT[31:24]});
+	assign io_rw        = CTRL_MEMWRITE & (&{ALU_OUT[31:24]});
 	
-	DataMem dmem(
-		.clk(clk), 
-		.write_en(CTRL_MEMWRITE),
-		//.read_en(CTRL_MEMREAD),
-		.address(ALU_OUT),   	 // Address bus width is 32 bits
-		.data_in(data_rs2),	 	 // Data bus width is 32 bits
-		.data_out(DMEM_OUT)	
-	);
 	
 	wire [31:0] CAL_OUT;
 	assign CAL_OUT = (CRTL_IMMTOREG == 1'b0) ? ALU_OUT : IMM_EXT;
@@ -120,20 +126,10 @@ module processor_main(
 	add pcaddimm(.A(current_instruction), .B(IMM_EXT << 1), .CIN(1'b0), .OF(), .SUM(PCADDIMM));
 	
 	assign REGWRITE_DATA = (CTRL_REGWRITESEL == 2'b00) ? CAL_OUT :
-	                       (CTRL_REGWRITESEL == 2'b01) ? DMEM_OUT : 
-	                       (CTRL_REGWRITESEL == 2'b10) ? PCADD4 : PCADDIMM;
+								  (CTRL_REGWRITESEL == 2'b01) ? DMEM_OUT : 
+								  (CTRL_REGWRITESEL == 2'b10) ? PCADD4 : PCADDIMM;
 								  
 	assign next_instruction = ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b00) ? PCADD4 :
-	                          ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b01) ? PCADD4 :
-	                          ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b10) ? ALU_OUT : PCADDIMM;
-	
-	display disp0(.DISPLAYWIRE(displaywire[3:0]),   .SEG(seg0));
-	display disp1(.DISPLAYWIRE(displaywire[7:4]),   .SEG(seg1));
-	display disp2(.DISPLAYWIRE(displaywire[11:8]),  .SEG(seg2));
-	display disp3(.DISPLAYWIRE(displaywire[15:12]), .SEG(seg3));
-	display disp4(.DISPLAYWIRE(displaywire[19:16]), .SEG(seg4));
-	display disp5(.DISPLAYWIRE(displaywire[23:20]), .SEG(seg5));
-	display disp6(.DISPLAYWIRE(displaywire[27:24]), .SEG(seg6));
-	display disp7(.DISPLAYWIRE(displaywire[31:28]), .SEG(seg7));
-
+									  ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b01) ? PCADD4 :
+									  ({(CTRL_BRANCH[1] & ALU_BRANCHFLAG), CTRL_BRANCH[0]} == 2'b10) ? ALU_OUT : PCADDIMM;
 endmodule 
