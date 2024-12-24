@@ -90,7 +90,7 @@ module alu_ctrl(
 			case (FUNC3)
 				3'b000:
 					begin
-						if ((ALUOp == 2'b00)&(FUNC7 == 1'b1))
+						if (FUNC7 == 1'b1)
 							ALUCTRL <= SUB;
 						else
 							ALUCTRL <= ADD;

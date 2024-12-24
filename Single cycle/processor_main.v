@@ -31,12 +31,22 @@ module processor_main(
 	wire [31:0] data_rs2;
 	
 	reg [31:0] PC;
+	reg STALLREG;
+	wire CTRL_STALLSIG;
 	
+	// PC
 	always@(posedge clk or negedge reset_n) begin
-		if (~reset_n) 
+		if (~reset_n) begin
 			PC <= 32'b0;
-		else
-			PC <= next_instruction;
+			STALLREG <= 1'b0;
+		end else begin
+			if (~STALLREG) begin
+				PC <= next_instruction;
+				STALLREG <= CTRL_STALLSIG;
+			end else begin
+				STALLREG <= 1'b0;
+			end
+		end
 	end
 	
 	assign current_instruction = PC;
@@ -61,6 +71,7 @@ module processor_main(
 		.ALUSRC(CTRL_ALUSRC), 
 		.REGWRITE(CTRL_REGWRITE), 
 		.IMMTOREG(CRTL_IMMTOREG),
+		.STALLSIG(CTRL_STALLSIG),
 		.ALUOP(CTRL_ALUOP), 
 		.BRANCH(CTRL_BRANCH), 
 		.REGWRITESEL(CTRL_REGWRITESEL)
@@ -112,11 +123,15 @@ module processor_main(
 	
 	
 	wire [31:0] DMEM_OUT;
+	wire IOSEL;
+	
 	assign dmem_addr    = ALU_OUT;
 	assign dmem_dataout = data_rs2;
 	assign DMEM_OUT     = dmem_datain;
-	assign dmem_rw      = CTRL_MEMWRITE & (~&{ALU_OUT[31:24]});
-	assign io_rw        = CTRL_MEMWRITE & (&{ALU_OUT[31:24]});
+	
+	assign IOSEL = &{ALU_OUT[31:2]};
+	assign dmem_rw      = CTRL_MEMWRITE & ~IOSEL;
+	assign io_rw        = CTRL_MEMWRITE & IOSEL;
 	
 	
 	wire [31:0] CAL_OUT;

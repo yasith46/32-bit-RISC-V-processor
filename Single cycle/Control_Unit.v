@@ -23,7 +23,7 @@
 module Control_Unit(
     input [31:0] instruction,  // 32-bit instruction input
 	 input clk,
-	 output reg MEMWRITE, ALUSRC, REGWRITE, IMMTOREG,
+	 output reg MEMWRITE, ALUSRC, REGWRITE, IMMTOREG, STALLSIG,
 	 output reg [1:0] ALUOP, BRANCH, REGWRITESEL
 );
 
@@ -35,6 +35,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'b0;
 						IMMTOREG     <= 1'b0;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b10;
@@ -48,6 +49,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'b1;
 						IMMTOREG     <= 1'b0;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b10;
@@ -61,6 +63,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'b1; 
 						ALUSRC       <= 1'b1;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b1;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b00;
@@ -74,6 +77,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx;
 						ALUSRC       <= 1'b1;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b11;
@@ -87,6 +91,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'b0;
 						ALUSRC       <= 1'b1;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b00;
@@ -100,6 +105,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'b0;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b01;
@@ -113,6 +119,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'bx;
 						IMMTOREG     <= 1'b1;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'bxx;		// would have to edit
@@ -126,6 +133,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'bx;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b11;
@@ -139,6 +147,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'bx;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b11;
@@ -152,6 +161,7 @@ module Control_Unit(
 						//MEMREAD      <= 1'bx; 
 						ALUSRC       <= 1'bx;
 						IMMTOREG     <= 1'bx;
+						STALLSIG		 <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'bxx;

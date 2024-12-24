@@ -91,7 +91,7 @@ module immediate_gen(
 				
 			7'b0010011:							// SLLI / SRLI / SRAI
 				begin
-					if ((INSTRUCTION[14:12] == 001)|(INSTRUCTION[14:12] == 001)) begin
+					if ((INSTRUCTION[14:12] == 3'b001)|(INSTRUCTION[14:12] == 3'b101)) begin
 						// SLLI / SRLI / SRAI
 						IMMEDIATE_OUT[31:5]  <= 27'b0;
 						IMMEDIATE_OUT[4:0]   <= INSTRUCTION[24:20];

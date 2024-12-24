@@ -108,7 +108,7 @@ module alu(
 					CIN <= 1'bx;  
 					A_ALU <= 32'bx; 
 					B_ALU <= 32'bx; 
-					OUT <= A >>> B; 
+					OUT <= $signed(A) >>> B; 
 				end
 				
 			SLT: 

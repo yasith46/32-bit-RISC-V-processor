@@ -26,30 +26,28 @@ module InstructMem(
 	initial begin
 		IM[0]  = 32'h08000313;          	//  0: li	   t1,128
 		IM[1]  = 32'h00032383;         	//  4: lw	   t2,0(t1)
-		IM[2]  = 32'h00032383;          	//  8: stall
-		IM[3]  = 32'h3e800093;          	//  c: li	   ra,1000
-		IM[4]  = 32'h7d008113;          	// 10: addi	   sp,ra,2000
-		IM[5]  = 32'hc1810293;          	// 14: addi	   t0,sp,-1000
+		IM[2]  = 32'h3e800093;          	//  8: li	   ra,1000
+		IM[3]  = 32'h7d008113;          	//  c: addi	   sp,ra,2000
+		IM[4]  = 32'hc1810293;          	// 10: addi	   t0,sp,-1000
 
-		IM[6]  = 32'h405101b3;          	// 18: sub	   gp,sp,t0
-		IM[7]  = 32'h00019463;          	// 1c: bnez	   gp,24 
-		IM[8]  = 32'h00c0006f;          	// 20: j	      2c 
+		IM[5]  = 32'h405101b3;          	// 14: sub	   gp,sp,t0
+		IM[6]  = 32'h00019463;          	// 18: bnez	   gp,20 
+		IM[7]  = 32'h00c0006f;          	// 1c: j	      28 
 
-		IM[9]  = 32'hfff28293;          	// 24: addi	   t0,t0,-1
-		IM[10] = 32'hff1ff06f;          	// 28: j	      18 
+		IM[8]  = 32'hfff28293;          	// 20: addi	   t0,t0,-1
+		IM[9]  = 32'hff1ff06f;          	// 24: j	      14 
 
-		IM[11] = 32'h12345237;          	// 2c: lui	   tp,0x12345
-		IM[12] = 32'h67820213;          	// 30: addiw   tp,tp,1656
-		IM[13] = 32'h00432023;          	// 34: sw	   tp,0(t1)
-		IM[14] = 32'h00000013;          	// 38: nop
-		IM[15] = 32'h00500f93;          	// 3c: li	   t6,5            ()
-		IM[16] = 32'h0ff80f37;         	// 40: lui	t5,0xff80
-		IM[17] = 32'h01ff2023;          	// 44: sw	t6,0(t5) # ff80000 <_sstack+0xff7ff4c>
-		IM[18] = 32'h0ff00f37;          	// 48: lui	t5,0xff00
-		IM[19] = 32'h004f2023;          	// 4c: sw	tp,0(t5) # ff00000 <_sstack+0xfefff4c>
-		IM[20] = 32'h0ff20f37;          	// 50: lui	t5,0xff20
-		IM[21] = 32'h000f2483;          	// 54: lw	s1,0(t5) # ff20000 <_sstack+0xff1ff4c>
-		IM[22] = 32'h000f2483;          	// 58: lw	s1,0(t5)
+		IM[10] = 32'h12345237;          	// 28: lui	   tp,0x12345
+		IM[11] = 32'h67820213;          	// 2c: addi    tp,tp,0x678
+		IM[12] = 32'h00432023;          	// 30: sw	   tp,0(t1)
+		IM[13] = 32'h00000013;          	// 34: nop
+		
+		IM[14] = 32'hfffff337;				// 38: lui		t1,0xfffff
+		IM[15] = 32'h40135313;				// 3c: srai    t1,t1,1
+		IM[16] = 32'h7fe30313;				// 40: addi    t1,t1,0x7fe
+		IM[17] = 32'h00432023;				// 44: sw		tp,0(t1)
+		IM[18] = 32'h00000013;				//	48: nop
+		IM[19] = 32'h00232023;				//	4c: sw		sp,0(t1)
 	end
 	
 	always @(*) begin
