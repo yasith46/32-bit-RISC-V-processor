@@ -71,11 +71,22 @@ module processor_main(
 	
 	
 	// BRANCH PREDICTION LOGIC
-	
-	wire [31:0] NEXTPREDICTED;
-	assign NEXTPREDICTED = PCADD4;	//// Change with predictor	---------------------------------------------------------------------- (!)
-	assign TAKENFLAG = 1'b0; //// Change with predictor ------------------------------------------------------------------------------ (!)
-	
+// Instantiate the 1-bit branch predictor
+    wire predicted_taken;
+    BranchPred bp (
+        .clk(clk),
+        .reset(reset_n),
+        .branch_addr(PFD_PC),     // Use PC as branch address
+        .branch_taken(ALU_BRANCHFLAG), // Actual branch outcome from ALU
+        .predicted_taken(predicted_taken) // Predicted branch outcome
+    );
+    
+    // Predicted PC for the next instruction
+    assign NEXTPREDICTED = predicted_taken ? PCADDIMM : PCADD4;
+    
+    // Prediction flag for comparison with actual outcome
+    assign TAKENFLAG = predicted_taken;
+        
 	assign next_instruction = (ALU_BRANCHFLAG ^ PDE_TAKENFLAG) ? REALBRANCH : NEXTPREDICTED;
 	assign PFD_FLUSH = ALU_BRANCHFLAG ^ PDE_TAKENFLAG;
 	assign PDE_FLUSH = ALU_BRANCHFLAG ^ PDE_TAKENFLAG;
