@@ -37,6 +37,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'b0;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'b10;
 						BRANCH       <= 2'b01;
@@ -51,6 +54,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'b0;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'b10;
 						BRANCH       <= 2'b01;
@@ -62,8 +68,11 @@ module Control_Unit(
 						// I-type instruction (load)
 						//MEMREAD      <= 1'b1; 
 						ALUSRC       <= 1'b1;
-						IMMTOREG     <= 1'bx;
+						IMMTOREG     <= 1'b1;
 						STALLSIG		 <= 1'b1;
+						
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b00;
@@ -79,6 +88,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'bx;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'b11;
 						BRANCH       <= 2'b10;
@@ -90,8 +102,11 @@ module Control_Unit(
 						// S-type instruction (store)
 						//MEMREAD      <= 1'b0;
 						ALUSRC       <= 1'b1;
-						IMMTOREG     <= 1'bx;
+						IMMTOREG     <= 1'b0;
 						STALLSIG		 <= 1'b0;
+						
+						REGWRITE     <= 1'b0;
+						MEMWRITE     <= 1'b1;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b00;
@@ -107,6 +122,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'bx;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b0;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'b01;
 						BRANCH       <= 2'b11;
@@ -121,6 +139,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'b1;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'bxx;		// would have to edit
 						BRANCH       <= 2'b01;
@@ -134,6 +155,9 @@ module Control_Unit(
 						ALUSRC       <= 1'bx;
 						IMMTOREG     <= 1'bx;
 						STALLSIG		 <= 1'b0;
+
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
 						
 						// 2 wire signals
 						ALUOP        <= 2'b11;
@@ -149,6 +173,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'bx;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b1;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'b11;
 						BRANCH       <= 2'b11;
@@ -163,6 +190,9 @@ module Control_Unit(
 						IMMTOREG     <= 1'bx;
 						STALLSIG		 <= 1'b0;
 						
+						REGWRITE     <= 1'b0;
+						MEMWRITE     <= 1'b0;
+						
 						// 2 wire signals
 						ALUOP        <= 2'bxx;
 						BRANCH       <= 2'b01;
@@ -170,79 +200,4 @@ module Control_Unit(
 					end
         endcase
     end
-	 
-	 always@(negedge clk) begin
-	 #2;
-		 case (instruction[6:0])
-            7'b0110011: // R-type instruction
-					begin 
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-				
-            7'b0010011: 
-					begin
-					// I-type instruction (arithmetic operations) 
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-					
-            7'b0000011: 
-					begin
-						// I-type instruction (load)
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-					
-            7'b1100111: 
-					begin
-						// I-type instruction (jalr-jump and link register)
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-					
-            7'b0100011: 
-					begin
-						// S-type instruction (store)
-						MEMWRITE     <= 1'b1;
-						REGWRITE     <= 1'b0;
-					end
-					
-            7'b1100011: 
-					begin
-						// SB-type instruction (Branch)
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b0;
-					end
-					
-            7'b0110111: 
-					begin
-						// U-type instruction (LUI-load upper immiediate)
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-					
-            7'b0010111: 
-					begin
-						// U-type instruction (AUIPC - add upper immediate to PC)
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-					
-            7'b1101111: 
-					begin
-						// J-type instruction (JAL)
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b1;
-					end
-            
-            default: 
-					begin
-						// For instructions other than base set
-						MEMWRITE     <= 1'b0;
-						REGWRITE     <= 1'b0;
-					end
-        endcase
-	 end
-
 endmodule 

@@ -139,36 +139,77 @@ module processor_main(
 	
 	wire [3:0] ALU_OPCMD;
 	wire [3:0] ALU_BRANCHCMD;
+	wire [1:0] rs1sel, rs2sel, ddatasel;
 	
 	alu_ctrl aluctrl(
 		.ALUOp(PDE_CTRL_ALUOP),
 		.FUNC3(PDE_F3),
 		.FUNC7(PDE_F7),
+		.IMMFLAG(&{rs2sel}), // Immediate ? 1 : 0
 		.ALUCTRL(ALU_OPCMD),
 		.BRANCHCONDITION(ALU_BRANCHCMD)
 	);
-	
-	wire [1:0] rs1sel, rs2sel;
 	
 	datafwd fwd(
 		.rs1(PFD_INST[19:15]), 
 		.rs2(PFD_INST[24:20]), 
 		.exerd(PDE_RDA), 
 		.memrd(PEM_RDA), 
-		.ctrl_alusrc(CTRL_ALUSRC), 
+		.ctrl_alusrc(CTRL_ALUSRC), // correct?
 		.clk(clk),
 		.E_REGWRITE(PDE_CTRL_REGWRITE), 
 		.M_REGWRITE(PEM_CTRL_REGWRITE),
+		.E_MEMWRITE(PDE_CTRL_MEMWRITE),
+		.M_MEMWRITE(PEM_CTRL_MEMWRITE),
 		.rs1sel(rs1sel), 
-		.rs2sel(rs2sel)
-	);
+		.rs2sel(rs2sel),
+		.ddatasel(ddatasel)
+	);	
 	
 	wire [31:0] B_RS2_IMM;
 	
-	wire [31:0] ALU_A, ALU_B;
+	reg [31:0] ALU_A, ALU_B, E_RS2;
 	
-	assign ALU_A = (rs1sel == 2'b01) ? PEM_CALOUT : (rs1sel == 2'b10) ? REGWRITE_DATA : PDE_RS1;
-	assign ALU_B = (rs2sel == 2'b11) ? PDE_IMM : (rs2sel == 2'b10) ? REGWRITE_DATA : (rs2sel == 2'b01) ? PEM_CALOUT : PDE_RS2;
+	always@(*) begin
+		case (rs1sel)
+			2'b00:
+				ALU_A <= PDE_RS1;
+			2'b01:
+				ALU_A <= PEM_CALOUT;
+			2'b10:
+				ALU_A <= REGWRITE_DATA;
+			2'b11:
+				ALU_A <= PDE_RS1;
+			default:
+				ALU_A <= PDE_RS1;
+		endcase
+			
+		case (rs2sel)
+			2'b00:
+				ALU_B <= PDE_RS2;
+			2'b01:
+				ALU_B <= PEM_CALOUT;
+			2'b10:
+				ALU_B <= REGWRITE_DATA;
+			2'b11:
+				ALU_B <= PDE_IMM;
+			default:
+				ALU_B <= PDE_RS2;
+		endcase
+		
+		case (ddatasel)
+			2'b00:
+				E_RS2 <= PDE_RS2;
+			2'b01:
+				E_RS2 <= PEM_CALOUT;
+			2'b10:
+				E_RS2 <= REGWRITE_DATA;
+			2'b11:
+				E_RS2 <= PDE_RS2;
+			default:
+				E_RS2 <= PDE_RS2;
+		endcase
+	end
 	
 	alu alu(
 		.A(ALU_A), 
@@ -254,6 +295,10 @@ module processor_main(
 			PDE_RS1  <= 32'b0;
 			PDE_RS2  <= 32'b0;
 			PDE_TAKENFLAG		<= 1'b0;
+			
+			PDE_CTRL_REGWRITE <= 1'b0; 
+			PDE_CTRL_MEMWRITE <= 1'b0; 
+			
 			PDE_CRTL_IMMTOREG <= 1'b0;			// Used
 			PDE_CTRL_ALUOP    <= 1'b0;
 			PDE_CTRL_BRANCH   <= 2'b01;
@@ -269,6 +314,9 @@ module processor_main(
 				PDE_RS2  <= 32'b0;				
 				PDE_TAKENFLAG		<= 1'b0;
 				
+				PDE_CTRL_REGWRITE <= 1'b0; 
+				PDE_CTRL_MEMWRITE <= 1'b0; 
+				
 				PDE_CRTL_IMMTOREG <= 1'b0;			// Used
 				PDE_CTRL_ALUOP    <= 1'b0;
 				PDE_CTRL_BRANCH   <= 2'b01;
@@ -282,7 +330,10 @@ module processor_main(
 				PDE_RS1 <= data_rs1;
 				PDE_RS2 <= data_rs2;
 				PDE_TAKENFLAG <= PFD_TAKENFLAG;
-					
+				
+				PDE_CTRL_REGWRITE <= CTRL_REGWRITE; 
+				PDE_CTRL_MEMWRITE <= CTRL_MEMWRITE; 
+				
 				PDE_CRTL_IMMTOREG <= CRTL_IMMTOREG;			// Used
 				PDE_CTRL_ALUOP    <= CTRL_ALUOP;				// Used
 				PDE_CTRL_BRANCH   <= CTRL_BRANCH;	
@@ -300,6 +351,10 @@ module processor_main(
 			PEM_RS2		<= 32'b0;
 			PEM_CALOUT	<= 32'b0;
 			PEM_TAKENFLAG <= 1'b0;
+			
+			PEM_CTRL_REGWRITE <= 1'b0;
+			PEM_CTRL_MEMWRITE <= 1'b0;
+			
 			PEM_CTRL_BRANCH	<= 2'b01;
 			PEM_CTRL_REGWRITESEL <= 2'b0;
 		end else if (~STALL) begin
@@ -308,9 +363,12 @@ module processor_main(
 			PEM_RDA		<= PDE_RDA;
 			PEM_ALUOUT  <= ALU_OUT;
 			PEM_BRANCHFLAG <= ALU_BRANCHFLAG;
-			PEM_RS2		<= PDE_RS2;
+			PEM_RS2		<= E_RS2;
 			PEM_CALOUT	<= CAL_OUT;
 			PEM_TAKENFLAG <= PDE_TAKENFLAG;
+			
+			PEM_CTRL_REGWRITE <= PDE_CTRL_REGWRITE;
+			PEM_CTRL_MEMWRITE <= PDE_CTRL_MEMWRITE;
 			
 			PEM_CTRL_BRANCH	<= PDE_CTRL_BRANCH;
 			PEM_CTRL_REGWRITESEL <= PDE_CTRL_REGWRITESEL;
@@ -323,6 +381,7 @@ module processor_main(
 			PMW_RDA      <= 5'b0;
 			PMW_CALOUT   <= 32'b0;
 			PMW_DOUT     <= 32'b0;
+			PMW_CTRL_REGWRITE <= 1'b0;
 			PMW_CTRL_REGWRITESEL <= 2'b0;
 		end else if (~STALL) begin
 			PMW_PC       <= PEM_PC;
@@ -330,43 +389,9 @@ module processor_main(
 			PMW_RDA      <= PEM_RDA;
 			PMW_CALOUT   <= PEM_CALOUT;
 			PMW_DOUT     <= DMEM_OUT;
-				
-			PMW_CTRL_REGWRITESEL <= PEM_CTRL_REGWRITESEL;
-		end
-		
-		if (~reset_n)
-			NEGEDGESTALL <= 1'b0;
-		else
-			NEGEDGESTALL <= STALL;
 			
-	end
-	
-	
-	always@(negedge clk or negedge reset_n) begin
-		// Boundary 2 : DE/EX
-		if (~reset_n) begin
-			PDE_CTRL_MEMWRITE <= 1'b0; 
-			PDE_CTRL_REGWRITE <= 1'b0; 
-		end else if (~NEGEDGESTALL) begin
-			PDE_CTRL_MEMWRITE <= CTRL_MEMWRITE; 
-			PDE_CTRL_REGWRITE <= CTRL_REGWRITE; 
-		end
-		
-		// Boundary 3 : EX/MEM
-		if (~reset_n) begin
-			PEM_CTRL_MEMWRITE <= 1'b0;
-			PEM_CTRL_REGWRITE <= 1'b0;
-		end else if (~NEGEDGESTALL) begin
-			PEM_CTRL_MEMWRITE <= PDE_CTRL_MEMWRITE;
-			PEM_CTRL_REGWRITE <= PDE_CTRL_REGWRITE;
-		end
-		
-		// Boundary 4 : MEM/WB
-		if (~reset_n) begin
-			PMW_CTRL_REGWRITE <= 1'b0;
-		end else if (~NEGEDGESTALL) begin
 			PMW_CTRL_REGWRITE <= PEM_CTRL_REGWRITE;
-		end
-	end
-								  
+			PMW_CTRL_REGWRITESEL <= PEM_CTRL_REGWRITESEL;
+		end		
+	end								  
 endmodule 
