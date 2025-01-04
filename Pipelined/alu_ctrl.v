@@ -73,7 +73,7 @@
 module alu_ctrl(
 		input [1:0] ALUOp,
 		input [2:0] FUNC3,
-		input FUNC7,
+		input FUNC7, IMMFLAG,
 		output reg [3:0] ALUCTRL,
 		output reg [3:0] BRANCHCONDITION
 	);
@@ -90,7 +90,7 @@ module alu_ctrl(
 			case (FUNC3)
 				3'b000:
 					begin
-						if (FUNC7 == 1'b1)
+						if (FUNC7 && ~IMMFLAG)
 							ALUCTRL <= SUB;
 						else
 							ALUCTRL <= ADD;
@@ -110,7 +110,7 @@ module alu_ctrl(
 					
 				3'b101:
 					begin
-						if (FUNC7 == 1'b0) 
+						if (~FUNC7) 
 							ALUCTRL <= SRL;
 						else 
 							ALUCTRL <= SRA;

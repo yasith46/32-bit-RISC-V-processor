@@ -34,7 +34,7 @@ module InstructMem(
 		IM[6]  = 32'h00019463;          	// 18: bnez	   gp,20 
 		IM[7]  = 32'h00c0006f;          	// 1c: j	      28 
 
-		IM[8]  = 32'hfff28293;          	// 20: addi	   t0,t0,-1
+		IM[8]  = 32'h3e828293;          	// 20: addi	   t0,t0,100
 		IM[9]  = 32'hff1ff06f;          	// 24: j	      14 
 
 		IM[10] = 32'h12345237;          	// 28: lui	   tp,0x12345

@@ -33,7 +33,7 @@ module DataMem(
 
    // Combinational read
    
-   always @(posedge clk) begin
+   always @(negedge clk) begin
 		if (write_en) begin
 			//#2;
 			DM[address[31:2]] <= data_in;  // Write to memory on posedge of clk when write_en is high

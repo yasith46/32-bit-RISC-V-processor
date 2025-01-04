@@ -43,12 +43,12 @@ module Register_File(
      // Read logic
     always @(*) begin
 		  #2;
-		  registers[0]   = 32'b0;
         Read_data01    = registers[Read_reg01];
         Read_data02    = registers[Read_reg02];
     end
      // Write logic (triggered on clock edge)
-    always @(posedge clk) begin
+    always @(negedge clk) begin
+		registers[0] <= 32'b0;
         //if (rst) begin
             // Reset all registers to 0
             
@@ -58,7 +58,8 @@ module Register_File(
        // end else 
         if (write_signal) begin
             // Write to the specified register
-            registers[Write_reg] <= Write_data;
+				if (Write_reg != 5'b0) 
+					registers[Write_reg] <= Write_data;
         end
     end  
     

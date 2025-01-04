@@ -32,7 +32,7 @@ module alu(
 	reg   CIN;
 	
 	// CLA
-	cla32 cla32_0(.A(A_ALU),  .B(B_ALU^{4{CIN}}),  .CIN(CIN),  .OF(),  .SUM(SUM),  .BAND(BAND),  .BXOR(BXOR));
+	cla32 cla32_0(.A(A_ALU),  .B(B_ALU^{32{CIN}}),  .CIN(CIN),  .OF(),  .SUM(SUM),  .BAND(BAND),  .BXOR(BXOR));
 				
 	parameter ADD = 4'b0000,  SUB = 4'b0001,  SLL = 4'b0010, 
 				 SRL = 4'b0011,  SRA = 4'b0100,  AND = 4'b0101,
@@ -139,10 +139,10 @@ module alu(
 		
 		case(BRANCHCONDITION)
 			BEQ:
-				BRANCHFLAG <= |SUM;
+				BRANCHFLAG <= ~|{SUM};
 				
 			BNE:
-				BRANCHFLAG <= ~|SUM;
+				BRANCHFLAG <= |{SUM};
 				
 			BLT:
 				BRANCHFLAG <= OUT[0];
