@@ -104,6 +104,7 @@ module processor_main(
 		.ALUOp(CTRL_ALUOP),
 		.FUNC3(inst[14:12]),
 		.FUNC7(inst[30]),
+		.IMMFLAG(CTRL_ALUSRC),		// Immediete ? 1 : 0
 		.ALUCTRL(ALU_OPCMD),
 		.BRANCHCONDITION(ALU_BRANCHCMD)
 	);
