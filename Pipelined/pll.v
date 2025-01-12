@@ -4,14 +4,14 @@ module pll(
 	output clkout
 	);
 	
-	reg clkreg; 
+	reg [24:0] clkreg; 
 	
 	always@(posedge clkin or negedge rst) begin
 		if (~rst) 
-			clkreg <= 1'b0;
+			clkreg <= 25'b0;
 		else
-			clkreg <= clkreg + 1'b1;
+			clkreg <= clkreg + 25'b1;
 	end
 	
-	assign clkout = clkreg;
+	assign clkout = clkreg[22];
 endmodule 

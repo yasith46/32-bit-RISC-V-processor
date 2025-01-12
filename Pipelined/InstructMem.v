@@ -23,7 +23,7 @@ module InstructMem(
 		output reg [31:0] inst_out   // Instruction bus width is 32 bits
 	);
 
-	(* ramstyle = "M9K" *) reg [31:0] IM [255:0];    // Data memory with 128 locations // Can extend 128 to 2^30
+	(* ramstyle = "M9K" *) reg [31:0] IM [21:0];    // Data memory with 128 locations // Can extend 128 to 2^30
 		
 	initial begin
 		IM[0]  = 32'h08000313;          	//  0: li	   r6,128		0x80
@@ -36,7 +36,7 @@ module InstructMem(
 		IM[6]  = 32'h00019463;          	// 18: bnez	   r3,20 
 		IM[7]  = 32'h00c0006f;          	// 1c: j	      28 
 
-		IM[8]  = 32'h3e828293;          	// 20: addi	   r5,r5,1000
+		IM[8]  = 32'h0fa28293;          	// 20: addi	   r5,r5,250
 		IM[9]  = 32'hff1ff06f;          	// 24: j	      14 
 
 		IM[10] = 32'h12345237;          	// 28: lui	   r4,0x12345

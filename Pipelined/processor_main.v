@@ -21,9 +21,9 @@
 
 
 module processor_main(
-		input  clk, reset_n,                       // Clock signal
+		input  clk, reset_n,                      // Clock signal
 		input  [31:0] dmem_datain, 
-		output [31:0] dmem_addr, dmem_dataout,
+		output [31:0] dmem_addr, dmem_dataout, PC,
 		output dmem_rw, io_rw
    );
 	
@@ -44,7 +44,11 @@ module processor_main(
 	wire STALL, PFD_FLUSH, PDE_FLUSH, TAKENFLAG;
 	
 	
+	assign PC = PFD_PC;
 	
+	// ALU Sum ALU_BRANCHFLAG correction
+	wire ALU_BRANCHFLAG, ALU_BRANCHFLAG_int;	
+	assign ALU_BRANCHFLAG = (PEM_PC == 32'b0) ? 1'b0 : ALU_BRANCHFLAG_int;
 	
 	// --------------------------------------------------------------------------------------------
 	// FETCH STAGE
@@ -60,8 +64,6 @@ module processor_main(
 	// 	If taken and branchflag are different, take/correct-to realbranch. Otherwise let it be.
 	
 	wire [31:0] REALBRANCH;
-	
-	wire ALU_BRANCHFLAG;
 	
 	assign REALBRANCH = ({(PDE_CTRL_BRANCH[1] & ALU_BRANCHFLAG), PDE_CTRL_BRANCH[0]} == 2'b00) ? PDE_PC :
 							  ({(PDE_CTRL_BRANCH[1] & ALU_BRANCHFLAG), PDE_CTRL_BRANCH[0]} == 2'b01) ? PDE_PC :
@@ -217,7 +219,7 @@ module processor_main(
 		.CTRL(ALU_OPCMD),
 		.BRANCHCONDITION(ALU_BRANCHCMD),
 		.OUT(ALU_OUT),
-		.BRANCHFLAG(ALU_BRANCHFLAG)
+		.BRANCHFLAG(ALU_BRANCHFLAG_int)
 	);
 	
 	

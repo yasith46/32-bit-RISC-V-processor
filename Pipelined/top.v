@@ -2,7 +2,7 @@ module top(
 		input  fpgaclk, reset_n,                       // Clock signal
 		output [6:0] seg0, seg1, seg2, seg3, seg4, seg5, seg6, seg7,
 		input  [31:0] switch,
-		output clkled
+		output clkled, ioled
 	);
 	
 	wire clk;
@@ -14,12 +14,13 @@ module top(
 	);
 	
 	wire dmem_rw, io_rw;
-	wire [31:0] dmem_addr, dmem_dataout, dmem_datain, ibuf_datain, dmbf_datain;
+	wire [31:0] dmem_addr, dmem_dataout, dmem_datain, ibuf_datain, dmbf_datain, PC;
 	
 	processor_main CPU(
 		.clk(clk), 
 		.reset_n(reset_n),  
 		.dmem_addr(dmem_addr),
+		.PC(PC),
 		.dmem_datain(dmbf_datain),
 		.dmem_dataout(dmem_dataout),
 		.dmem_rw(dmem_rw),
@@ -63,5 +64,6 @@ module top(
 	display disp7(.DISPLAYWIRE(PORT0[31:28]), .SEG(seg7));
 	
 	assign clkled = clk;
+	assign ioled  = dmem_rw | io_rw;
 	
 endmodule 
